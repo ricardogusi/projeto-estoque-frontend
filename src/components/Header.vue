@@ -4,10 +4,10 @@
       <img src="@/assets/nexdomlogo.jpg" alt="Nexdom Logo" class="h-10 w-auto" />
       <nav class="flex space-x-8">
         <RouterLink
-          to="/cadastro"
+          to="/produtos"
           class="text-white hover:text-[#00C4FF] font-medium"
         >
-          Cadastro
+          Produtos
         </RouterLink>
         <RouterLink
           to="/dashboard"

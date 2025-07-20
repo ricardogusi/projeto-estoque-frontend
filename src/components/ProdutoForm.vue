@@ -1,162 +1,162 @@
 <template>
-  <div class="max-w-md mx-auto p-4 bg-white shadow rounded">
-    <h2 class="text-xl font-semibold mb-4">{{ isEditando ? 'Editar Produto' : 'Novo Produto' }}</h2>
+  <div
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+    @click.self="close"
+  >
+    <form
+      @submit.prevent="submitForm"
+      class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md"
+    >
+      <h2 class="text-2xl font-semibold mb-4 text-[#0B162C]">
+        {{ isEdit ? 'Editar Produto' : 'Novo Produto' }}
+      </h2>
 
-    <form @submit.prevent="handleSubmit">
-      <div class="mb-3">
-        <label for="codigo" class="block font-medium mb-1">Código</label>
+      <div class="mb-4">
+        <label class="block font-medium text-gray-700 mb-1" for="codigo">Código</label>
         <input
           id="codigo"
-          v-model="form.codigo"
           type="text"
-          class="w-full border rounded px-3 py-2"
-          :disabled="isEditando"
+          v-model="form.codigo"
+          class="w-full border border-gray-300 rounded px-3 py-2"
           required
+          :disabled="isEdit"
         />
       </div>
 
-      <div class="mb-3">
-        <label for="descricao" class="block font-medium mb-1">Descrição</label>
+      <div class="mb-4">
+        <label class="block font-medium text-gray-700 mb-1" for="descricao">Descrição</label>
         <input
           id="descricao"
-          v-model="form.descricao"
           type="text"
-          class="w-full border rounded px-3 py-2"
+          v-model="form.descricao"
+          class="w-full border border-gray-300 rounded px-3 py-2"
           required
         />
       </div>
 
-      <div class="mb-3">
-        <label for="tipoProduto" class="block font-medium mb-1">Tipo Produto</label>
+      <div class="mb-4">
+        <label class="block font-medium text-gray-700 mb-1" for="tipoProduto">Tipo Produto</label>
         <select
           id="tipoProduto"
-          v-model="form.tipoProduto"
-          class="w-full border rounded px-3 py-2"
+          v-model.number="form.tipoProdutoId"
+          class="w-full border border-gray-300 rounded px-3 py-2"
           required
         >
-          <option value="" disabled>Selecione</option>
-          <option value="Eletrônico">Eletrônico</option>
-          <option value="Eletrodoméstico">Eletrodoméstico</option>
-          <option value="Móvel">Móvel</option>
+          <option disabled value="">Selecione um tipo</option>
+          <option value="1">Eletrônico</option>
+          <option value="2">Eletrodoméstico</option>
+          <option value="3">Móvel</option>
         </select>
       </div>
 
-      <div class="mb-3">
-        <label for="valorFornecedor" class="block font-medium mb-1">Valor no Fornecedor (R$)</label>
+      <div class="mb-4">
+        <label class="block font-medium text-gray-700 mb-1" for="valorFornecedor">Valor no Fornecedor</label>
         <input
           id="valorFornecedor"
-          v-model.number="form.valorFornecedor"
           type="number"
-          min="0"
+          min="0.01"
           step="0.01"
-          class="w-full border rounded px-3 py-2"
+          v-model.number="form.valorFornecedor"
+          class="w-full border border-gray-300 rounded px-3 py-2"
           required
         />
       </div>
 
-      <div class="mb-3">
-        <label for="quantidadeEstoque" class="block font-medium mb-1">Quantidade em Estoque</label>
+        <div class="mb-6">
+        <label class="block font-medium text-gray-700 mb-1" for="fornecedor">Fornecedor</label>
+        <select
+          id="fornecedor"
+          v-model.number="form.fornecedorId"
+          class="w-full border border-gray-300 rounded px-3 py-2"
+          required
+        >
+          <option disabled value="">Selecione um tipo</option>
+          <option value="1">Fornecedor 1</option>
+          <option value="2">Fornecedor 2</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-medium text-gray-700 mb-1" for="quantidadeEstoque">Quantidade em Estoque</label>
         <input
           id="quantidadeEstoque"
-          v-model.number="form.quantidadeEstoque"
           type="number"
           min="0"
-          class="w-full border rounded px-3 py-2"
+          step="1"
+          v-model.number="form.quantidadeEstoque"
+          class="w-full border border-gray-300 rounded px-3 py-2"
           required
-          :disabled="isEditando"
         />
-      </div>
+      </div>    
 
-      <div class="flex justify-end gap-2">
+      <div class="flex justify-end space-x-4">
+        <button
+          type="button"
+          @click="close"
+          class="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100"
+        >
+          Cancelar
+        </button>
         <button
           type="submit"
-          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          :disabled="loading"
+          :disabled="!isValid"
+          class="px-4 py-2 rounded bg-[#00C4FF] text-white font-semibold hover:bg-[#009ACC] disabled:opacity-50"
         >
-          {{ loading ? 'Salvando...' : 'Salvar' }}
+          Salvar
         </button>
-        <button type="button" class="px-4 py-2 rounded border" @click="cancelar">Cancelar</button>
       </div>
     </form>
-
-    <div v-if="error" class="mt-4 text-red-600">{{ error }}</div>
-    <div v-if="sucesso" class="mt-4 text-green-600">Produto salvo com sucesso!</div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import type { Produto } from '../types/Produto';
-import { criarProduto, buscarProdutoPorId, editarProduto } from '../services/produtoService';
+<script setup>
+import { reactive, ref, computed, onMounted } from 'vue'
+import api from '@/services/api'
 
-const route = useRoute();
-const router = useRouter();
+const props = defineProps({
+  produto: { type: Object, default: null }
+})
+const emit = defineEmits(['close', 'saved'])
 
-const loading = ref(false);
-const error = ref<string | null>(null);
-const sucesso = ref(false);
+const isEdit = ref(!!props.produto)
 
-const isEditando = ref(false);
-const form = reactive<Produto>({
-  id: 0,
+const form = reactive({
+  id: null,
   codigo: '',
   descricao: '',
-  tipoProduto: '',
-  valorFornecedor: 0,
-  quantidadeEstoque: 0,
-});
+  tipoProdutoId: '',
+  fornecedorId: '',
+  valorFornecedor: null,
+  quantidadeEstoque: null,
+})
 
-async function carregarProduto(id: number) {
-  loading.value = true;
-  error.value = null;
-  try {
-    const p = await buscarProdutoPorId(id);
-    Object.assign(form, p);
-  } catch (err) {
-    error.value = (err as Error).message || 'Erro ao carregar produto';
-  } finally {
-    loading.value = false;
-  }
+if (props.produto) {
+  Object.assign(form, props.produto)
 }
 
-async function handleSubmit() {
-  loading.value = true;
-  error.value = null;
-  sucesso.value = false;
+const isValid = computed(() => {
+  return (
+    form.codigo.trim() !== '' &&
+    form.descricao.trim() !== '' &&
+    form.tipoProdutoId !== '' &&
+    form.fornecedorId !== '' &&
+    form.valorFornecedor > 0 &&
+    form.quantidadeEstoque >= 0
+  )
+})
 
+const close = () => emit('close')
+
+const submitForm = async () => {
   try {
-    if (isEditando.value) {
-      await editarProduto(form);
+    if (isEdit.value) {
+      await api.put(`/produtos/${form.id}`, form)
     } else {
-      await criarProduto(form);
+      await api.post('/produtos', form)
     }
-    sucesso.value = true;
-    setTimeout(() => {
-      sucesso.value = false;
-      router.push('/produtos');
-    }, 1500);
+    emit('saved')
   } catch (err) {
-    error.value = (err as Error).message || 'Erro ao salvar produto';
-  } finally {
-    loading.value = false;
+    console.error(err)
   }
 }
-
-function cancelar() {
-  router.push('/produtos');
-}
-
-onMounted(() => {
-  const idParam = route.params.id;
-  if (idParam) {
-    isEditando.value = true;
-    const id = Number(idParam);
-    carregarProduto(id);
-  }
-});
 </script>
-
-<style scoped>
-/* Aqui você pode colocar seus estilos customizados ou usar Tailwind, etc */
-</style>
