@@ -3,16 +3,13 @@
     <div class="flex items-center justify-between h-16 max-w-full px-4">
       <img src="@/assets/nexdomlogo.jpg" alt="Nexdom Logo" class="h-10 w-auto" />
       <nav class="flex space-x-8">
-        <RouterLink
-          to="/produtos"
-          class="text-white hover:text-[#00C4FF] font-medium"
-        >
+        <RouterLink to="/produtos" class="text-white hover:text-[#00C4FF] font-medium">
           Produtos
         </RouterLink>
-        <RouterLink
-          to="/dashboard"
-          class="text-white hover:text-[#00C4FF] font-medium"
-        >
+        <RouterLink to="/movimentacoes" class="text-white hover:text-[#00C4FF] font-medium">
+          Movimentações
+        </RouterLink>
+        <RouterLink to="/dashboard" class="text-white hover:text-[#00C4FF] font-medium">
           Dashboard
         </RouterLink>
       </nav>
@@ -21,13 +18,11 @@
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router';
+import { RouterLink } from 'vue-router'
 </script>
 
 <style scoped>
-
 header {
   min-width: 100vw;
 }
-
 </style>
