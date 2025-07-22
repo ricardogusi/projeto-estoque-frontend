@@ -59,7 +59,7 @@ const movimentarProduto = async (payload) => {
     modalAberto.value = false
     alert('Movimentação realizada com sucesso!')
   } catch (e) {
-    alert(e.response?.data?.mensagem || 'Erro ao movimentar produto')
+    alert(e.response?.data?.mensagem || 'Erro ao movimentar produto, verifique o saldo do estoque.')
   }
 }
 
