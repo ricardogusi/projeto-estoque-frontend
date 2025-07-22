@@ -94,7 +94,7 @@ const deleteProduto = async (id) => {
       await api.delete(`/produtos/${id}`)
       fetchProdutos()
     } catch (error) {
-      alert('Erro ao excluir produto.')
+      alert('Erro ao excluir produto, verifique se o produto não está vinculado a movimentações.')
     }
   }
 }

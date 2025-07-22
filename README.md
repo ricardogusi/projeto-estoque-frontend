@@ -1,39 +1,108 @@
-# estoque-frontend
+# Sistema de Estoque - Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+Este é o frontend do sistema de gerenciamento de estoque, desenvolvido com Vue 3 e Vite. Ele permite gerenciar produtos, movimentações de estoque e visualizar relatórios de lucro.
 
-## Recommended IDE Setup
+## Funcionalidades
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **Gerenciamento de Produtos**: Adicionar, editar, listar e excluir produtos.
+- **Movimentações de Estoque**: Registrar entradas e saídas de produtos.
+- **Relatórios**: Visualizar o lucro total por produto.
+- **Autenticação Simples**: Tela de login para acesso ao sistema (Pode-se usar qualquer usuário e senha)
 
-## Type Support for `.vue` Imports in TS
+## Tecnologias Utilizadas
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- **Vue 3**: Framework JavaScript para construção de interfaces de usuário.
+- **Vite**: Ferramenta de build rápida para desenvolvimento web.
+- **Tailwind CSS**: Framework CSS para estilização.
+- **Axios**: Biblioteca para requisições HTTP.
+- **TypeScript**: Superset do JavaScript para tipagem estática.
 
-## Customize configuration
+## Estrutura do Projeto
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```plaintext
+estoque-frontend/
+├── src/
+│   ├── assets/          # Arquivos estáticos (imagens, CSS)
+│   ├── components/      # Componentes reutilizáveis (ex.: Header, Modais)
+│   ├── pages/           # Páginas principais (ex.: Lista de Produtos)
+│   ├── router/          # Configuração de rotas
+│   ├── services/        # Serviços para comunicação com a API
+│   ├── types/           # Definições de tipos TypeScript
+│   ├── views/           # Telas específicas (ex.: Produtos, Movimentações)
+│   ├── App.vue          # Componente raiz
+│   └── main.ts          # Arquivo de entrada principal
+├── public/              # Arquivos públicos (ex.: favicon)
+├── package.json         # Dependências e scripts do projeto
+├── tailwind.config.js   # Configuração do Tailwind CSS
+└── vite.config.ts       # Configuração do Vite
 ```
 
-### Compile and Hot-Reload for Development
+## Requisitos
 
-```sh
-npm run dev
-```
+- Node.js 16+
+- Gerenciador de pacotes (npm ou yarn)
 
-### Type-Check, Compile and Minify for Production
+## Configuração do Projeto
 
-```sh
-npm run build
-```
+1. Clone o repositório:
 
-### Lint with [ESLint](https://eslint.org/)
+   ```sh
+   git clone https://github.com/seu-usuario/estoque-frontend.git
+   cd estoque-frontend
+   ```
 
-```sh
-npm run lint
-```
+2. Instale as dependências:
+
+   ```sh
+   npm install
+   ```
+
+3. Configure a URL base da API no arquivo [`src/services/api.ts`](src/services/api.ts):
+
+   ```ts
+   const api = axios.create({
+     baseURL: 'http://localhost:8080/api', // Atualize conforme necessário
+   });
+   ```
+
+## Scripts Disponíveis
+
+- **Iniciar o servidor de desenvolvimento**:
+
+  ```sh
+  npm run dev
+  ```
+
+- **Build para produção**:
+
+  ```sh
+  npm run build
+  ```
+
+- **Pré-visualizar o build**:
+
+  ```sh
+  npm run preview
+  ```
+
+- **Checagem de tipos TypeScript**:
+
+  ```sh
+  npm run type-check
+  ```
+
+- **Lint do código**:
+
+  ```sh
+  npm run lint
+  ```
+
+- **Formatar código com Prettier**:
+
+  ```sh
+  npm run format
+  ```
+
+## Licença
+
+Este projeto está licenciado sob a [MIT License](https://opensource.org/licenses/MIT).
